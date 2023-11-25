@@ -1,6 +1,6 @@
 # Docker Service
 
-快速构建 Docker 镜像及运行 Docker 服务的.
+快速构建 Docker 镜像及运行 Docker 服务.
 
 # 背景
 
@@ -152,3 +152,152 @@ npm -g link
 
 - [ ] 镜像构建时, 支持 `docker build` 透传参数, 这意味着需要记住复杂的构建参数, 否则就违背了该项目的初衷(更简单地构建, 减少使用者负担), 目前还没想到更好地简单实现方式. 或者是否直接从 `docker-compose.yaml` 里直接构建镜像, 这样就可以将构建参数放在 `docker-compose.yaml` 里的, 这个需要研究一下, 如果可以, 就可以仅维护 `docker-compose.yaml` 文件即可.
 - [ ] 提供 Go 实现, 提供二进制命令
+
+
+oclif-hello-world
+=================
+
+oclif example Hello World CLI
+
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/hello-world/tree/main)
+[![GitHub license](https://img.shields.io/github/license/oclif/hello-world)](https://github.com/oclif/hello-world/blob/main/LICENSE)
+
+<!-- toc -->
+* [Docker Service](#docker-service)
+* [背景](#背景)
+* [特性](#特性)
+* [前提条件](#前提条件)
+* [安装](#安装)
+* [使用方式](#使用方式)
+* [默认 `Dockerfile` 文件, 可使用 `--file` 参数指定 Dockerfile](#默认-dockerfile-文件-可使用---file-参数指定-dockerfile)
+* [镜像名称默认读取 `package.json` 文件的 `name` 字段, 可使用 `--name` 参数指定镜像名称](#镜像名称默认读取-packagejson-文件的-name-字段-可使用---name-参数指定镜像名称)
+* [镜像版本号默认读取 `package.json` 文件的 `version` 字段, 可使用 `--version` 参数指定镜像版本](#镜像版本号默认读取-packagejson-文件的-version-字段-可使用---version-参数指定镜像版本)
+* [默认使用 `dev` service](#默认使用-dev-service)
+* [可以自定义 dev service: `docker-compose.yaml` 需要定义 `development` service](#可以自定义-dev-service-docker-composeyaml-需要定义-development-service)
+* [默认使用 `docker-compose.yaml` 文件, 可使用 `--file` 参数指定配置文件](#默认使用-docker-composeyaml-文件-可使用---file-参数指定配置文件)
+* [镜像名称默认读取 `package.json` 文件的 `name` 字段](#镜像名称默认读取-packagejson-文件的-name-字段)
+* [版本号从 CLI 提供的选项里选择](#版本号从-cli-提供的选项里选择)
+* [可以自定义 prod service: `docker-compose.yaml` 需要定义 `production` service](#可以自定义-prod-service-docker-composeyaml-需要定义-production-service)
+* [可使用 `--image-name` 参数指定镜像名称](#可使用---image-name-参数指定镜像名称)
+* [三方库集成](#三方库集成)
+* [.release-it.yaml](#release-ityaml)
+* [省略其他配置](#省略其他配置)
+* [开发模式](#开发模式)
+* [TODO](#todo)
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
+# Usage
+<!-- usage -->
+```sh-session
+$ npm install -g docker-service
+$ docker-service COMMAND
+running command...
+$ docker-service (--version)
+docker-service/0.0.0 darwin-x64 node-v18.17.1
+$ docker-service --help [COMMAND]
+USAGE
+  $ docker-service COMMAND
+...
+```
+<!-- usagestop -->
+# Commands
+<!-- commands -->
+* [`docker-service build [FILE]`](#docker-service-build-file)
+* [`docker-service help [COMMANDS]`](#docker-service-help-commands)
+* [`docker-service run-dev [FILE]`](#docker-service-run-dev-file)
+* [`docker-service run-prod [FILE]`](#docker-service-run-prod-file)
+
+## `docker-service build [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ docker-service build [FILE] [-f] [-n <value>]
+
+ARGUMENTS
+  FILE  file to read
+
+FLAGS
+  -f, --force
+  -n, --name=<value>  name to print
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ docker-service build
+```
+
+_See code: [src/commands/build.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/build.ts)_
+
+## `docker-service help [COMMANDS]`
+
+Display help for docker-service.
+
+```
+USAGE
+  $ docker-service help [COMMANDS] [-n]
+
+ARGUMENTS
+  COMMANDS  Command to show help for.
+
+FLAGS
+  -n, --nested-commands  Include all nested commands in the output.
+
+DESCRIPTION
+  Display help for docker-service.
+```
+
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.2.20/src/commands/help.ts)_
+
+## `docker-service run-dev [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ docker-service run-dev [FILE] [-f] [-n <value>]
+
+ARGUMENTS
+  FILE  file to read
+
+FLAGS
+  -f, --force
+  -n, --name=<value>  name to print
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ docker-service run-dev
+```
+
+_See code: [src/commands/run-dev.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/run-dev.ts)_
+
+## `docker-service run-prod [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ docker-service run-prod [FILE] [-f] [-n <value>]
+
+ARGUMENTS
+  FILE  file to read
+
+FLAGS
+  -f, --force
+  -n, --name=<value>  name to print
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ docker-service run-prod
+```
+
+_See code: [src/commands/run-prod.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/run-prod.ts)_
+<!-- commandsstop -->

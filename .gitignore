@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-.DS_Store
+**/.DS_Store
 dist
 dist-ssr
 coverage
@@ -16,6 +16,7 @@ coverage
 
 /cypress/videos/
 /cypress/screenshots/
+.nyc_output
 
 # Editor directories and files
 .idea
@@ -27,7 +28,12 @@ coverage
 
 pnpm-lock.yaml
 package-lock.json
+oclif.lock
+oclif.manifest.json
+yarn.lock
 test-results
 playwright-report
 docker-images
 release
+tmp
+/lib
