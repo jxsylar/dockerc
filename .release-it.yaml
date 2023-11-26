@@ -1,0 +1,7 @@
+git:
+  tagName: "v${version}"
+  commitMessage: "chore: release v${version}"
+  requireUpstream: false
+  push: false
+hooks:
+  "after:release": "echo Successfully release ${version}"
