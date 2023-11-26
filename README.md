@@ -1,44 +1,29 @@
-# Docker Service
+# Docker Compose Wrapper CLI
 
-Docker build and run services based on `docker-compose.yaml`.
+CLI wrapper for docker build and run services based on `docker-compose.yaml` in frontend project.
 
 The only thing we concern is the **dynamic version number**.
 
+# Prerequisites
 
-# 背景
+- Docker installed - Can use `docker` command
+- Docker compose installed - Can use `docker compose` command
+- Docker Service started
+- `docker-compose.yaml` file existed in cwd
 
-在项目版本迭代过程中, 使用 Docker 发布时, 遇到以下问题:
+# Features
 
-- 版本迭代频繁, 频繁进行开发环境和生产环境部署
-- 生产环境部署可能存在多个参数, 使用 `docker run` 容易忘记, 不方便管理, 可统一使用 `docker-compose.yaml` 管理, 但每次更新服务都需要修改 `docker-compose.yaml` 镜像版本
+- Image version existence check
+- Use semver version
+- Use `name` and `version` fields of `package.json` default
 
-该项目解决以下问题:
-
-- 通过维护 `docker-compose.yaml` 文件, 支持一键启动开发环境和生产环境, 不需要记住各种启动参数
-- 每次更新服务, 不需要更新 `docker-compose.yaml` 文件, 可以通过 CLI 提供选项, 自行选择镜像版本
-
-# 特性
-
-- 镜像版本存在性校验
-- 版本号使用 [semver](https://semver.org/) 规范管理
-- 支持自定义扩展
-- 提供 CLI 命令
-- 支持编程运行
-- 默认集成前端项目场景: 默认使用 `package.json` 的 `name` 和 `version` 字段
-
-# 前提条件
-
-- 已安装 Docker
-- 已安装 Docker Compose
-- 已启用 Docker 服务
-
-# 安装
+# Installation
 
 ```bash
-npm i -g docker-service
+npm i -g dockerc
 ```
 
-# 使用方式
+# Usage
 
 ## 镜像构建
 
@@ -124,35 +109,76 @@ docker-service run-prod production
 docker-service run-prod --image-name demo
 ```
 
-# 三方库集成
+# Integration
 
-## 集成 [release-it](https://github.com/release-it/release-it)
+## [release-it](https://github.com/release-it/release-it)
 
 ```yaml
 # .release-it.yaml
-# 省略其他配置
+# omit other configuration
 hooks:
-  "after:release": "docker-service build --version ${version}"
+  "after:release": "dockerc build --version ${version}"
 ```
 
-# 开发模式
+# Development
+
+## Clone the repository
+
+```bash
+git clone https://github.com/jxsylar/dockerc
+```
+
+## Install dependencies
 
 ```bash
 pnpm i
 ```
 
-本地全局安装:
+Also, It will run `build` automatic. 
+
+## Install CLI global
 
 ```bash
-npm -g link
+npm link
 ```
 
-这样本地修改后的, 使用全局命令执行的都是最新代码.
+It will install to `$(npm prefix root -g)/bin/` folder, make sure this path is in `PATH` env.
+
+Now you can use `dockerc` command in your shell:
+
+```bash
+docker
+```
+
+## Update
+
+After code changed, build again:
+
+```bash
+pnpm run build
+```
+
+And the `dockerc` command will automatic use the latest version, which means you don't need to run `npm link` again.
+
+## Document
+
+Automatically update `README.md` by running:
+
+```bash
+pnpm run doc
+```
+
+## Uninstall
+
+```bash
+npm unlink -g dockerc
+```
+
+This command can run in any path, which means you don't need to `cd` the project path.
 
 # TODO
 
-- [ ] 镜像构建时, 支持 `docker build` 透传参数, 这意味着需要记住复杂的构建参数, 否则就违背了该项目的初衷(更简单地构建, 减少使用者负担), 目前还没想到更好地简单实现方式. 或者是否直接从 `docker-compose.yaml` 里直接构建镜像, 这样就可以将构建参数放在 `docker-compose.yaml` 里的, 这个需要研究一下, 如果可以, 就可以仅维护 `docker-compose.yaml` 文件即可.
-- [ ] 提供 Go 实现, 提供二进制命令
+- [ ] Plan to implement by go: In some extreme scenarios, we can't install online, so it would be better if it has binary version.
 
 
 oclif-hello-world
