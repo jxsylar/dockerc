@@ -1,6 +1,6 @@
 import { Args, Command, Flags } from '@oclif/core';
 
-export default class RunProd extends Command {
+export default class Prod extends Command {
   static args = {
     service: Args.string({
       default: 'prod',
@@ -20,7 +20,7 @@ export default class RunProd extends Command {
   };
 
   public async run(): Promise<void> {
-    const { args, flags } = await this.parse(RunProd);
+    const { args, flags } = await this.parse(Prod);
     console.log(args);
     console.log(flags);
   }
