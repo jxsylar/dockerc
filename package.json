@@ -16,7 +16,7 @@
     "prepack": "npm run build && oclif manifest && oclif readme",
     "prepare": "npm run build",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "doc": "oclif readme && git add README.md"
+    "doc": "oclif readme"
   },
   "keywords": [
     "oclif",
@@ -63,6 +63,7 @@
     "@oclif/plugin-plugins": "^4",
     "chalk": "^5.3.0",
     "ora": "^7.0.1",
+    "semver": "^7.5.4",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
@@ -71,6 +72,7 @@
     "@types/chai": "^4",
     "@types/mocha": "^10",
     "@types/node": "^18",
+    "@types/semver": "^7.5.6",
     "@types/shelljs": "^0.8.15",
     "chai": "^4",
     "eslint": "^8",

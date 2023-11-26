@@ -18,16 +18,6 @@ The only thing we concern is the **dynamic version number**.
 * [Installation](#installation)
 * [Usage](#usage)
 * [Commands](#commands)
-* [镜像名称默认读取 `package.json` 文件的 `name` 字段](#镜像名称默认读取-packagejson-文件的-name-字段)
-* [默认 `Dockerfile` 文件, 可使用 `--file` 参数指定 Dockerfile](#默认-dockerfile-文件-可使用---file-参数指定-dockerfile)
-* [镜像版本号默认读取 `package.json` 文件的 `version` 字段, 可使用 `--version` 参数指定镜像版本](#镜像版本号默认读取-packagejson-文件的-version-字段-可使用---version-参数指定镜像版本)
-* [默认使用 `dev` service](#默认使用-dev-service)
-* [可以自定义 dev service: `docker-compose.yaml` 需要定义 `development` service](#可以自定义-dev-service-docker-composeyaml-需要定义-development-service)
-* [默认使用 `docker-compose.yaml` 文件, 可使用 `--file` 参数指定配置文件](#默认使用-docker-composeyaml-文件-可使用---file-参数指定配置文件)
-* [镜像名称默认读取 `package.json` 文件的 `name` 字段](#镜像名称默认读取-packagejson-文件的-name-字段-1)
-* [版本号从 CLI 提供的选项里选择](#版本号从-cli-提供的选项里选择)
-* [可以自定义 prod service: `docker-compose.yaml` 需要定义 `production` service](#可以自定义-prod-service-docker-composeyaml-需要定义-production-service)
-* [可使用 `--image-name` 参数指定镜像名称](#可使用---image-name-参数指定镜像名称)
 * [Integration](#integration)
 * [.release-it.yaml](#release-ityaml)
 * [omit other configuration](#omit-other-configuration)
@@ -37,7 +27,7 @@ The only thing we concern is the **dynamic version number**.
 
 # Prerequisites
 
-- Docker installed - Can use `docker` command
+- Docker installed
 - Docker compose installed - Can use `docker compose` command
 - Docker Service started
 - `docker-compose.yaml` file existed in cwd
@@ -99,63 +89,57 @@ services:
       - 80:80
 ```
 
-
-<!-- usage -->
-```sh-session
-$ npm install -g dockerc
-$ dockerc COMMAND
-running command...
-$ dockerc (--version)
-dockerc/0.0.0 darwin-x64 node-v18.17.1
-$ dockerc --help [COMMAND]
-USAGE
-  $ dockerc COMMAND
-...
-```
-<!-- usagestop -->
-
 # Commands
+
 <!-- commands -->
-* [`dockerc build IMAGENAME`](#dockerc-build-imagename)
+* [`dockerc build`](#dockerc-build)
+* [`dockerc dev`](#dockerc-dev)
 * [`dockerc help [COMMANDS]`](#dockerc-help-commands)
-* [`dockerc run-dev [SERVICE]`](#dockerc-run-dev-service)
-* [`dockerc run-prod [SERVICE]`](#dockerc-run-prod-service)
+* [`dockerc prod`](#dockerc-prod)
 
-## `dockerc build IMAGENAME`
+## `dockerc build`
 
-构建 Docker 镜像
+Build docker images with `build` service in `docker-compose.yaml` file.
 
 ```
 USAGE
-  $ dockerc build IMAGENAME [--file <value>] [--version <value>]
-
-ARGUMENTS
-  IMAGENAME  Docker 镜像名称, 支持带上版本号.
-             默认读取 `package.json` 文件的 `name` 字段.
+  $ dockerc build [--image <value>] [--no-export] [--version <value>]
 
 FLAGS
-  --file=<value>     [default: Dockerfile] `Dockerfile` 文件名
-  --version=<value>  [default: 0.0.0] Docker 镜像版本号.
-                     默认读取 `package.json` 文件的 `version` 字段.
+  --image=<value>    Docker image name. Use the `name` field of the `package.json` file in CWD.
+  --no-export        Don't export image after the docker build is successful.
+  --version=<value>  Docker image version. Use the `version` field of the `package.json` file in CWD.
 
 DESCRIPTION
-  构建 Docker 镜像
+  Build docker images with `build` service in `docker-compose.yaml` file.
+  It will inject `IMAGE_NAME` and `VERSION` environment variables.
 
 EXAMPLES
-  $ dockerc build                    # 使用 `package.json` 的 `name` 字段作为镜像名, `version` 字段作为镜像版本号
+  $ dockerc build    # Use the `name` and `version` field of the `package.json` file in CWD.
 
-  $ dockerc build example            # 自定义镜像名, 使用 `package.json` 的 `version` 字段作为镜像版本号
+  $ dockerc build --image example    # Specify image name
 
-  $ dockerc build --version 1.0.0    # 自定义镜像版本, 使用 `package.json` 的 `name` 字段作为镜像名
-
-  $ dockerc build example:1.0.0            # 自定义镜像名和镜像版本
-
-  $ dockerc build --file Dockerfile.conf   # 指定 Dockerfile 文件
-
-  $ dockerc build example:1.0.0 --version 2.0.0   # 最终构建镜像版本号为 `2.0.0`
+  $ dockerc build --version 1.0.0    # Specify image version
 ```
 
 _See code: [src/commands/build.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/build.ts)_
+
+## `dockerc dev`
+
+Start `dev` service in `docker-compose.yaml` file.
+
+```
+USAGE
+  $ dockerc dev
+
+DESCRIPTION
+  Start `dev` service in `docker-compose.yaml` file.
+
+EXAMPLES
+  $ dockerc dev
+```
+
+_See code: [src/commands/dev.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/dev.ts)_
 
 ## `dockerc help [COMMANDS]`
 
@@ -177,133 +161,31 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.2.20/src/commands/help.ts)_
 
-## `dockerc run-dev [SERVICE]`
+## `dockerc prod`
 
-使用 `docker-compose.yaml` 启动开发环境服务, 开发环境使用固定镜像
-
-```
-USAGE
-  $ dockerc run-dev [SERVICE] [--file <value>]
-
-ARGUMENTS
-  SERVICE  [default: dev] docker-compose 配置文件定义的服务名称
-
-FLAGS
-  --file=<value>  [default: docker-compose.yaml] 自定义 docker-compose 配置文件
-
-DESCRIPTION
-  使用 `docker-compose.yaml` 启动开发环境服务, 开发环境使用固定镜像
-
-EXAMPLES
-  $ dockerc run-dev               # 启用 `dev` 服务
-
-  $ dockerc run-dev development   # 启用 `development` 服务
-
-  $ dockerc run-dev --file docker.compose.yaml   # 自定义 docker-compose 配置文件
-
-  $ dockerc run-dev development --file docker.compose.yaml   # 指定自定义 docker-compose 配置文件, 并启动 development 服务
-```
-
-_See code: [src/commands/run-dev.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/run-dev.ts)_
-
-## `dockerc run-prod [SERVICE]`
-
-describe the command here
+Start `prod` service in `docker-compose.yaml` file.
 
 ```
 USAGE
-  $ dockerc run-prod [SERVICE] --imageName <value>
-
-ARGUMENTS
-  SERVICE  [default: prod] Docker compose service
+  $ dockerc prod [--image <value>]
 
 FLAGS
-  --imageName=<value>  (required) Docker image name
+  --image=<value>  Docker image name. Use the `name` field of the `package.json` file in CWD.
 
 DESCRIPTION
-  describe the command here
+  Start `prod` service in `docker-compose.yaml` file.
+  The docker image will be selected from the existing image list
+  It will inject `IMAGE_NAME` and `VERSION` environment variables.
 
 EXAMPLES
-  $ dockerc run-prod
+  $ dockerc prod    # Use the `name` field of the `package.json` file in CWD.
+
+  $ dockerc prod --image example    # Specify image name
 ```
 
-_See code: [src/commands/run-prod.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/run-prod.ts)_
+_See code: [src/commands/prod.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/prod.ts)_
 <!-- commandsstop -->
 
-## 镜像构建
-
-镜像构建默认使用 `Dockerfile` 文件, 确保存在 Dockerfile:
-
-
-Dockerfile 保留了 `VERSION` 参数, 构建时会传入版本号, 容器内部可以使用这个环境变量.
-
-```bash
-# 镜像名称默认读取 `package.json` 文件的 `name` 字段
-docker-service build <image-name>
-
-# 默认 `Dockerfile` 文件, 可使用 `--file` 参数指定 Dockerfile
-docker-service build --file Dockerfile.conf
-
-# 镜像版本号默认读取 `package.json` 文件的 `version` 字段, 可使用 `--version` 参数指定镜像版本
-docker-service build --version 1.0.0
-```
-
-如果镜像版本已存在, 则会停止构建, 并抛出错误.
-
-## 服务部署
-
-镜像运行默认使用 `docker-compose.yaml` 文件:
-
-```yaml
-version: "3"
-services:
-  dev:
-    image: nginx:1.24.0
-    restart: unless-stopped
-    volumes:
-      - ./dist:/usr/share/nginx/html
-      - ./nginx.conf:/etc/nginx/templates/default.conf.template
-    ports:
-      - 8082:80
-
-  prod:
-    # 占位符从环境变量里读取
-    image: ${IMAGE_NAME}:${VERSION}
-    restart: unless-stopped
-    ports:
-      - 8083:80
-```
-
-`docker-compose.yaml` 文件里定义了 `dev` 和 `prod` 两个 service, 服务部署时分为开发模式和生产模式.
-
-`dev` 和 `prod` 模式区别: `dev` 模式使用固定镜像(如: 基镜像), `prod` 模式需要选择镜像版本
-
-### 开发模式
-
-```bash
-# 默认使用 `dev` service
-docker-service run-dev
-
-# 可以自定义 dev service: `docker-compose.yaml` 需要定义 `development` service
-docker-service run-dev development
-
-# 默认使用 `docker-compose.yaml` 文件, 可使用 `--file` 参数指定配置文件
-docker-service run-dev --file docker.compose.yaml
-```
-
-### 生产模式
-
-```bash
-# 镜像名称默认读取 `package.json` 文件的 `name` 字段
-# 版本号从 CLI 提供的选项里选择
-docker-service run-prod
-
-# 可以自定义 prod service: `docker-compose.yaml` 需要定义 `production` service
-docker-service run-prod production
-
-# 可使用 `--image-name` 参数指定镜像名称
-docker-service run-prod --image-name demo
-```
 
 # Integration
 
@@ -363,6 +245,8 @@ Automatically update `README.md` by running:
 ```bash
 pnpm run doc
 ```
+
+Note: The command must run after building.
 
 ## Uninstall
 

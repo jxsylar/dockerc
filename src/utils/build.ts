@@ -3,17 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { executeCmd, executeWithSpin } from './exec.js';
-import { maybeGetValueFromPackageFile } from './package.js';
 
 const { red } = chalk;
 const cwd = process.cwd();
-
-export function getImage(imageName?: string, version?: string) {
-  const name = maybeGetValueFromPackageFile('name', imageName);
-  const v = maybeGetValueFromPackageFile('version', version);
-
-  return `${name}:${v}`;
-}
 
 export function ifImageExists(imageName: string) {
   const cmd = `docker images -q ${imageName}`;
@@ -26,7 +18,7 @@ export function confirmImageNotExists(imageName: string) {
     console.log(
       red(`Docker image exists: ${imageName}, please release first.`),
     );
-    process.exit(0);
+    process.exit();
   }
 }
 

@@ -4,7 +4,7 @@ import {
   buildImage,
   confirmImageNotExists,
   exportImage,
-  getImage,
+  maybeGetValueFromPackageFile,
 } from '../utils/index.js';
 
 export default class Build extends Command {
@@ -37,7 +37,9 @@ export default class Build extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(Build);
 
-    const image = getImage(flags.image, flags.version);
+    const name = maybeGetValueFromPackageFile('name', flags.image);
+    const v = maybeGetValueFromPackageFile('version', flags.version);
+    const image = `${name}:${v}`;
     confirmImageNotExists(image);
     buildImage(image);
     if (!flags['no-export']) {
