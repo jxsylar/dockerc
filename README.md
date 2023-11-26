@@ -1,6 +1,9 @@
 # Docker Service
 
-快速构建 Docker 镜像及运行 Docker 服务.
+Docker build and run services based on `docker-compose.yaml`.
+
+The only thing we concern is the **dynamic version number**.
+
 
 # 背景
 
@@ -54,13 +57,11 @@ ENV VERSION=${VERSION}
 Dockerfile 保留了 `VERSION` 参数, 构建时会传入版本号, 容器内部可以使用这个环境变量.
 
 ```bash
-docker-service build
+# 镜像名称默认读取 `package.json` 文件的 `name` 字段
+docker-service build <image-name>
 
 # 默认 `Dockerfile` 文件, 可使用 `--file` 参数指定 Dockerfile
 docker-service build --file Dockerfile.conf
-
-# 镜像名称默认读取 `package.json` 文件的 `name` 字段, 可使用 `--name` 参数指定镜像名称
-docker-service build --name custom-image-name
 
 # 镜像版本号默认读取 `package.json` 文件的 `version` 字段, 可使用 `--version` 参数指定镜像版本
 docker-service build --version 1.0.0
@@ -103,7 +104,7 @@ services:
 docker-service run-dev
 
 # 可以自定义 dev service: `docker-compose.yaml` 需要定义 `development` service
-docker-service run-dev --name development
+docker-service run-dev development
 
 # 默认使用 `docker-compose.yaml` 文件, 可使用 `--file` 参数指定配置文件
 docker-service run-dev --file docker.compose.yaml
@@ -117,7 +118,7 @@ docker-service run-dev --file docker.compose.yaml
 docker-service run-prod
 
 # 可以自定义 prod service: `docker-compose.yaml` 需要定义 `production` service
-docker-service run-prod --name production
+docker-service run-prod production
 
 # 可使用 `--image-name` 参数指定镜像名称
 docker-service run-prod --image-name demo

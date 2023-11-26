@@ -2,7 +2,10 @@ import { Args, Command, Flags } from '@oclif/core';
 
 export default class RunProd extends Command {
   static args = {
-    file: Args.string({ description: 'file to read' }),
+    service: Args.string({
+      default: 'prod',
+      description: 'Docker compose service',
+    }),
   };
 
   static description = 'describe the command here';
@@ -10,19 +13,15 @@ export default class RunProd extends Command {
   static examples = ['<%= config.bin %> <%= command.id %>'];
 
   static flags = {
-    // flag with no value (-f, --force)
-    force: Flags.boolean({ char: 'f' }),
-    // flag with a value (-n, --name=VALUE)
-    name: Flags.string({ char: 'n', description: 'name to print' }),
+    imageName: Flags.string({
+      description: 'Docker image name',
+      required: true,
+    }),
   };
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(RunProd);
-
-    const name = flags.name ?? 'world';
-    this.log(`hello ${name} from src/commands/run-prod.ts`);
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`);
-    }
+    console.log(args);
+    console.log(flags);
   }
 }

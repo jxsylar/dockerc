@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "author": "jxsylar",
-  "description": "Quickly build Docker images and run Docker services",
+  "description": "Docker build and run services based on docker-compose.yaml",
   "repository": "jxsylar/docker-service",
   "homepage": "https://github.com/jxsylar/docker-service",
   "bugs": "https://github.com/jxsylar/docker-service/issues",
