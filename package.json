@@ -1,6 +1,6 @@
 {
   "name": "dockerc",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "author": "jxsylar",
   "description": "CLI wrapper for docker build and run services based on `docker-compose.yaml` in frontend project",
