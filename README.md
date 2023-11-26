@@ -12,7 +12,27 @@ The only thing we concern is the **dynamic version number**.
 
 
 <!-- toc -->
-
+* [Docker Compose Wrapper CLI](#docker-compose-wrapper-cli)
+* [Prerequisites](#prerequisites)
+* [Features](#features)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Commands](#commands)
+* [镜像名称默认读取 `package.json` 文件的 `name` 字段](#镜像名称默认读取-packagejson-文件的-name-字段)
+* [默认 `Dockerfile` 文件, 可使用 `--file` 参数指定 Dockerfile](#默认-dockerfile-文件-可使用---file-参数指定-dockerfile)
+* [镜像版本号默认读取 `package.json` 文件的 `version` 字段, 可使用 `--version` 参数指定镜像版本](#镜像版本号默认读取-packagejson-文件的-version-字段-可使用---version-参数指定镜像版本)
+* [默认使用 `dev` service](#默认使用-dev-service)
+* [可以自定义 dev service: `docker-compose.yaml` 需要定义 `development` service](#可以自定义-dev-service-docker-composeyaml-需要定义-development-service)
+* [默认使用 `docker-compose.yaml` 文件, 可使用 `--file` 参数指定配置文件](#默认使用-docker-composeyaml-文件-可使用---file-参数指定配置文件)
+* [镜像名称默认读取 `package.json` 文件的 `name` 字段](#镜像名称默认读取-packagejson-文件的-name-字段-1)
+* [版本号从 CLI 提供的选项里选择](#版本号从-cli-提供的选项里选择)
+* [可以自定义 prod service: `docker-compose.yaml` 需要定义 `production` service](#可以自定义-prod-service-docker-composeyaml-需要定义-production-service)
+* [可使用 `--image-name` 参数指定镜像名称](#可使用---image-name-参数指定镜像名称)
+* [Integration](#integration)
+* [.release-it.yaml](#release-ityaml)
+* [omit other configuration](#omit-other-configuration)
+* [Development](#development)
+* [TODO](#todo)
 <!-- tocstop -->
 
 # Prerequisites
@@ -81,11 +101,133 @@ services:
 
 
 <!-- usage -->
-
+```sh-session
+$ npm install -g dockerc
+$ dockerc COMMAND
+running command...
+$ dockerc (--version)
+dockerc/0.0.0 darwin-x64 node-v18.17.1
+$ dockerc --help [COMMAND]
+USAGE
+  $ dockerc COMMAND
+...
+```
 <!-- usagestop -->
 
 # Commands
 <!-- commands -->
+* [`dockerc build IMAGENAME`](#dockerc-build-imagename)
+* [`dockerc help [COMMANDS]`](#dockerc-help-commands)
+* [`dockerc run-dev [SERVICE]`](#dockerc-run-dev-service)
+* [`dockerc run-prod [SERVICE]`](#dockerc-run-prod-service)
+
+## `dockerc build IMAGENAME`
+
+构建 Docker 镜像
+
+```
+USAGE
+  $ dockerc build IMAGENAME [--file <value>] [--version <value>]
+
+ARGUMENTS
+  IMAGENAME  Docker 镜像名称, 支持带上版本号.
+             默认读取 `package.json` 文件的 `name` 字段.
+
+FLAGS
+  --file=<value>     [default: Dockerfile] `Dockerfile` 文件名
+  --version=<value>  [default: 0.0.0] Docker 镜像版本号.
+                     默认读取 `package.json` 文件的 `version` 字段.
+
+DESCRIPTION
+  构建 Docker 镜像
+
+EXAMPLES
+  $ dockerc build                    # 使用 `package.json` 的 `name` 字段作为镜像名, `version` 字段作为镜像版本号
+
+  $ dockerc build example            # 自定义镜像名, 使用 `package.json` 的 `version` 字段作为镜像版本号
+
+  $ dockerc build --version 1.0.0    # 自定义镜像版本, 使用 `package.json` 的 `name` 字段作为镜像名
+
+  $ dockerc build example:1.0.0            # 自定义镜像名和镜像版本
+
+  $ dockerc build --file Dockerfile.conf   # 指定 Dockerfile 文件
+
+  $ dockerc build example:1.0.0 --version 2.0.0   # 最终构建镜像版本号为 `2.0.0`
+```
+
+_See code: [src/commands/build.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/build.ts)_
+
+## `dockerc help [COMMANDS]`
+
+Display help for dockerc.
+
+```
+USAGE
+  $ dockerc help [COMMANDS] [-n]
+
+ARGUMENTS
+  COMMANDS  Command to show help for.
+
+FLAGS
+  -n, --nested-commands  Include all nested commands in the output.
+
+DESCRIPTION
+  Display help for dockerc.
+```
+
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.2.20/src/commands/help.ts)_
+
+## `dockerc run-dev [SERVICE]`
+
+使用 `docker-compose.yaml` 启动开发环境服务, 开发环境使用固定镜像
+
+```
+USAGE
+  $ dockerc run-dev [SERVICE] [--file <value>]
+
+ARGUMENTS
+  SERVICE  [default: dev] docker-compose 配置文件定义的服务名称
+
+FLAGS
+  --file=<value>  [default: docker-compose.yaml] 自定义 docker-compose 配置文件
+
+DESCRIPTION
+  使用 `docker-compose.yaml` 启动开发环境服务, 开发环境使用固定镜像
+
+EXAMPLES
+  $ dockerc run-dev               # 启用 `dev` 服务
+
+  $ dockerc run-dev development   # 启用 `development` 服务
+
+  $ dockerc run-dev --file docker.compose.yaml   # 自定义 docker-compose 配置文件
+
+  $ dockerc run-dev development --file docker.compose.yaml   # 指定自定义 docker-compose 配置文件, 并启动 development 服务
+```
+
+_See code: [src/commands/run-dev.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/run-dev.ts)_
+
+## `dockerc run-prod [SERVICE]`
+
+describe the command here
+
+```
+USAGE
+  $ dockerc run-prod [SERVICE] --imageName <value>
+
+ARGUMENTS
+  SERVICE  [default: prod] Docker compose service
+
+FLAGS
+  --imageName=<value>  (required) Docker image name
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ dockerc run-prod
+```
+
+_See code: [src/commands/run-prod.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/run-prod.ts)_
 <!-- commandsstop -->
 
 ## 镜像构建
@@ -233,4 +375,3 @@ This command can run in any path, which means you don't need to `cd` the project
 # TODO
 
 - [ ] Plan to implement by go: In some extreme scenarios, we can't install online, so it would be better if it has binary version.
-
