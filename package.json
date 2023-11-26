@@ -4,9 +4,9 @@
   "type": "module",
   "author": "jxsylar",
   "description": "CLI wrapper for docker build and run services based on `docker-compose.yaml` in frontend project",
-  "repository": "jxsylar/docker-service",
-  "homepage": "https://github.com/jxsylar/docker-service",
-  "bugs": "https://github.com/jxsylar/docker-service/issues",
+  "repository": "jxsylar/dockerc",
+  "homepage": "https://github.com/jxsylar/dockerc",
+  "bugs": "https://github.com/jxsylar/dockerc/issues",
   "license": "MIT",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
