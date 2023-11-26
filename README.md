@@ -22,6 +22,7 @@ The only thing we concern is the **dynamic version number**.
 * [.release-it.yaml](#release-ityaml)
 * [omit other configuration](#omit-other-configuration)
 * [Development](#development)
+* [Reference](#reference)
 * [TODO](#todo)
 <!-- tocstop -->
 
@@ -122,7 +123,7 @@ EXAMPLES
   $ dockerc build --version 1.0.0    # Specify image version
 ```
 
-_See code: [src/commands/build.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/build.ts)_
+_See code: [src/commands/build.ts](https://github.com/jxsylar/dockerc/blob/v0.0.1/src/commands/build.ts)_
 
 ## `dockerc dev`
 
@@ -139,7 +140,7 @@ EXAMPLES
   $ dockerc dev
 ```
 
-_See code: [src/commands/dev.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/dev.ts)_
+_See code: [src/commands/dev.ts](https://github.com/jxsylar/dockerc/blob/v0.0.1/src/commands/dev.ts)_
 
 ## `dockerc help [COMMANDS]`
 
@@ -183,7 +184,7 @@ EXAMPLES
   $ dockerc prod --image example    # Specify image name
 ```
 
-_See code: [src/commands/prod.ts](https://github.com/jxsylar/docker-service/blob/v0.0.0/src/commands/prod.ts)_
+_See code: [src/commands/prod.ts](https://github.com/jxsylar/dockerc/blob/v0.0.1/src/commands/prod.ts)_
 <!-- commandsstop -->
 
 
