@@ -260,7 +260,3 @@ This command can run in any path, which means you don't need to `cd` the project
 # Reference
 
 [Docker compose file variable interpolation](https://github.com/compose-spec/compose-spec/blob/master/spec.md#interpolation)
-
-# TODO
-
-- [ ] Plan to implement by go: In some extreme scenarios, we can't install online, so it would be better if it has binary version.
