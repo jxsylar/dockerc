@@ -23,7 +23,6 @@ The only thing we concern is the **dynamic version number**.
 * [omit other configuration](#omit-other-configuration)
 * [Development](#development)
 * [Reference](#reference)
-* [TODO](#todo)
 <!-- tocstop -->
 
 # Prerequisites
@@ -123,7 +122,7 @@ EXAMPLES
   $ dockerc build --version 1.0.0    # Specify image version
 ```
 
-_See code: [src/commands/build.ts](https://github.com/jxsylar/dockerc/blob/v0.0.1/src/commands/build.ts)_
+_See code: [src/commands/build.ts](https://github.com/jxsylar/dockerc/blob/v1.0.0/src/commands/build.ts)_
 
 ## `dockerc dev`
 
@@ -140,7 +139,7 @@ EXAMPLES
   $ dockerc dev
 ```
 
-_See code: [src/commands/dev.ts](https://github.com/jxsylar/dockerc/blob/v0.0.1/src/commands/dev.ts)_
+_See code: [src/commands/dev.ts](https://github.com/jxsylar/dockerc/blob/v1.0.0/src/commands/dev.ts)_
 
 ## `dockerc help [COMMANDS]`
 
@@ -160,7 +159,7 @@ DESCRIPTION
   Display help for dockerc.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.2.20/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.7/src/commands/help.ts)_
 
 ## `dockerc prod`
 
@@ -184,7 +183,7 @@ EXAMPLES
   $ dockerc prod --image example    # Specify image name
 ```
 
-_See code: [src/commands/prod.ts](https://github.com/jxsylar/dockerc/blob/v0.0.1/src/commands/prod.ts)_
+_See code: [src/commands/prod.ts](https://github.com/jxsylar/dockerc/blob/v1.0.0/src/commands/prod.ts)_
 <!-- commandsstop -->
 
 
