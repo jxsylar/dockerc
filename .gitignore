@@ -26,11 +26,8 @@ coverage
 *.sln
 *.sw?
 
-pnpm-lock.yaml
-package-lock.json
 oclif.lock
 oclif.manifest.json
-yarn.lock
 test-results
 playwright-report
 docker-images
